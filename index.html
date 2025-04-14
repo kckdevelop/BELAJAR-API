@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daftar Produk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    <h1 class="text-center">DAFTAR PRODUK DARI FAKESTORE API</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Gambar</th>
+              <th>Nama Produk</th>
+              <th>Harga(Rp)</th>
+              <th>Kategori</th>
+              <th>Deskripsi</th>
+            </tr>
+          </thead>
+          <tbody id="product-table">
+            <!-- Data produk akan dimuat di sini -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>  
+    <script>
+      fetch('https://fakestoreapi.com/products')
+        .then(res => res.json())
+        .then(products => {
+          const tableBody = document.getElementById('product-table');
+    
+          products.forEach((product, index) => {
+            const item = document.createElement('tr');
+            item.innerHTML = `
+              <td>${index + 1}</td>
+              <td><img src="${product.image}" alt="${product.title}" style="height: 80px; object-fit: contain;"></td>
+              <td>${product.title}</td>
+              <td>Rp ${product.price.toLocaleString('id-ID')}</td>
+              <td>${product.category}</td>
+              <td class="text-start">${product.description.substring(0, 100)}...</td>
+            `;
+            tableBody.appendChild(item);
+          });
+        })
+        .catch(error => {
+          console.error('Gagal memuat data produk:', error);
+          document.getElementById('product-table').innerHTML = `
+            <tr><td colspan="6" class="text-danger">Gagal memuat data produk.</td></tr>
+          `;
+        });
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
